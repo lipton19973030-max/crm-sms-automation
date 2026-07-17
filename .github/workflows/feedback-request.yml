@@ -1,0 +1,19 @@
+name: Запрос отзыва после выполнения заказа
+
+on:
+  schedule:
+    - cron: '0 * * * *'   # каждый час
+  workflow_dispatch: {}     # + возможность запустить вручную из вкладки Actions
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: node scripts/feedback-request.js
+        env:
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+          SMS_RU_API_ID: ${{ secrets.SMS_RU_API_ID }}

@@ -1,0 +1,19 @@
+name: Ежедневное напоминание клиентам
+
+on:
+  schedule:
+    - cron: '0 7 * * *'   # 10:00 по Москве (UTC+3)
+  workflow_dispatch: {}
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: node scripts/daily-reminder.js
+        env:
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+          SMS_RU_API_ID: ${{ secrets.SMS_RU_API_ID }}
