@@ -4,7 +4,8 @@ const { sendSms } = require('./sms');
 const cfg = require('./config');
 
 async function run() {
-  // Находим заказы со статусом "Выполнено", по которым ещё не запрашивали отзыв
+  const todayStr = new Date().toISOString().split('T')[0]; // "2026-07-17"
+
   const result = await notion.queryDatabase(cfg.ORDERS_DB_ID, {
     filter: {
       and: [
@@ -15,6 +16,10 @@ async function run() {
         {
           property: cfg.ORDERS_FEEDBACK_SENT_PROP,
           checkbox: { equals: false },
+        },
+        {
+          property: cfg.ORDERS_DATE_PROP,
+          date: { equals: todayStr },
         },
       ],
     },
