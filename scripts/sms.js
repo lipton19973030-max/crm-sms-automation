@@ -1,4 +1,4 @@
-async function sendSms(phone, text) {
+﻿async function sendSms(phone, text) {
   const url = new URL('https://smsc.ru/sys/send.php');
   url.searchParams.set('login', process.env.SMSC_LOGIN);
   url.searchParams.set('psw', process.env.SMSC_PASSWORD);
@@ -11,7 +11,7 @@ async function sendSms(phone, text) {
   const data = await res.json();
 
   if (data.error_code) {
-    throw new Error(`SMSC error: ${JSON.stringify(data)}`);
+    throw new Error(SMSC error: );
   }
   return data;
 }
