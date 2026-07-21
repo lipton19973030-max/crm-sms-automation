@@ -1,13 +1,19 @@
 ﻿async function sendSms(phone, text) {
-  const url = new URL('https://smsc.ru/sys/send.php');
-  url.searchParams.set('login', process.env.SMSC_LOGIN);
-  url.searchParams.set('psw', process.env.SMSC_PASSWORD);
-  url.searchParams.set('phones', phone);
-  url.searchParams.set('mes', text);
-  url.searchParams.set('fmt', '3');
-  url.searchParams.set('charset', 'utf-8');
+  const params = new URLSearchParams({
+    login: process.env.SMSC_LOGIN,
+    psw: process.env.SMSC_PASSWORD,
+    phones: phone,
+    mes: text,
+    fmt: '3',
+    charset: 'utf-8'
+  });
 
-  const res = await fetch(url);
+  const res = await fetch('https://smsc.ru/sys/send.php', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: params.toString()
+  });
+
   const data = await res.json();
 
   if (data.error_code) {
