@@ -11,7 +11,7 @@
   const data = await res.json();
 
   if (data.error_code) {
-    throw new Error(SMSC error: );
+    throw new Error('SMSC error: ' + JSON.stringify(data));
   }
   return data;
 }
