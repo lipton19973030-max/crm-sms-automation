@@ -1,15 +1,17 @@
 async function sendSms(phone, text) {
-  const url = new URL('https://sms.ru/sms/send');
-  url.searchParams.set('api_id', process.env.SMS_RU_API_ID);
-  url.searchParams.set('to', phone);
-  url.searchParams.set('msg', text);
-  url.searchParams.set('json', '1');
+  const url = new URL('https://smsc.ru/sys/send.php');
+  url.searchParams.set('login', process.env.SMSC_LOGIN);
+  url.searchParams.set('psw', process.env.SMSC_PASSWORD);
+  url.searchParams.set('phones', phone);
+  url.searchParams.set('mes', text);
+  url.searchParams.set('fmt', '3');
+  url.searchParams.set('charset', 'utf-8');
 
   const res = await fetch(url);
   const data = await res.json();
 
-  if (data.status !== 'OK') {
-    throw new Error(`SMS.ru error: ${JSON.stringify(data)}`);
+  if (data.error_code) {
+    throw new Error(`SMSC error: ${JSON.stringify(data)}`);
   }
   return data;
 }
